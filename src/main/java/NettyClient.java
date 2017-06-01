@@ -47,13 +47,16 @@ public class NettyClient {
                     socketChannel.pipeline().addLast(new NettyClientHandler());
                 }
             });
+            //发起异步连接操作
             ChannelFuture future = bootstrap.connect(host, port).sync();
             if (future.isSuccess()) {
                 SocketChannel socketChannel = (SocketChannel) future.channel();
                 System.out.println("----------------connect server success----------------");
             }
+            //等待客户端链路关闭
             future.channel().closeFuture().sync();
         } finally {
+            //优雅退出，释放NIO线程组
             eventLoopGroup.shutdownGracefully();
         }
     }

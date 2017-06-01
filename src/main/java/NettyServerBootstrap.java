@@ -26,7 +26,7 @@ public class NettyServerBootstrap {
     }
 
     private void bind() {
-
+        //配置服务端的NIO线程组
         EventLoopGroup boss = new NioEventLoopGroup();
         EventLoopGroup worker = new NioEventLoopGroup();
 
@@ -47,6 +47,7 @@ public class NettyServerBootstrap {
                     p.addLast(new NettyServerHandler());
                 }
             });
+            //绑定端口，同步等待成功
             ChannelFuture f = bootstrap.bind(port).sync();
             if (f.isSuccess()) {
                 logger.debug("启动Netty服务成功，端口号：" + this.port);
@@ -58,6 +59,7 @@ public class NettyServerBootstrap {
             logger.error("启动Netty服务异常，异常信息：" + e.getMessage());
             e.printStackTrace();
         } finally {
+            //优雅退出，释放线程池资源
             boss.shutdownGracefully();
             worker.shutdownGracefully();
         }

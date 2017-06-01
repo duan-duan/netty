@@ -14,7 +14,7 @@ public class NettyClientHandler extends ChannelHandlerAdapter{
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         byte[] data = "服务器，给我一个APPLE".getBytes();
-        firstMessage=Unpooled.buffer();
+        firstMessage = Unpooled.buffer(data.length);
         firstMessage.writeBytes(data);
         ctx.writeAndFlush(firstMessage);
     }
