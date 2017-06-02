@@ -51,6 +51,7 @@ public class NettyServerBootstrap {
             ChannelFuture f = bootstrap.bind(port).sync();
             if (f.isSuccess()) {
                 logger.debug("启动Netty服务成功，端口号：" + this.port);
+                System.out.print("启动Netty服务成功，端口号：" + this.port);
             }
             // 关闭连接
             f.channel().closeFuture().sync();
