@@ -33,7 +33,7 @@ public class TimeClientHandler extends ChannelHandlerAdapter{
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         String body = (String) msg;
-        System.out.print("now receive order :"+body+"; the counter is :"+ ++counter);
+        System.out.println("now receive order :"+body+"; the counter is :"+ ++counter);
     }
 
     @Override
