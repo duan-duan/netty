@@ -40,7 +40,7 @@ public class Encryption {
     //java 解密代码  rsa
     public static byte[] rsaDescryptGess (byte[] src,Key key) throws IOException,GeneralSecurityException{
         Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
-        cipher.init(Cipher.ENCRYPT_MODE,key);
+        cipher.init(Cipher.DECRYPT_MODE,key);
         ByteArrayOutputStream daos = new ByteArrayOutputStream();
         for(int i = 0; i < src.length; i = i+128){
             byte[] tmp = new byte[128];
@@ -66,10 +66,6 @@ public class Encryption {
         }
         return result;
     }
-
-
-
-
 
 
     public static void main(String[] args) {
