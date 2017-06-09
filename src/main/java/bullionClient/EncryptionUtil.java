@@ -1,13 +1,13 @@
 package bullionClient;
 
 import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.DESedeKeySpec;
+import javax.crypto.spec.IvParameterSpec;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.security.GeneralSecurityException;
-import java.security.Key;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
+import java.security.*;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 
@@ -16,9 +16,10 @@ import java.security.interfaces.RSAPublicKey;
  * @date: 2017/6/5
  * @description:
  */
-public class Encryption {
+public class EncryptionUtil {
 
-   //java 加密代码  rsa
+
+    //java 加密代码  rsa
     public static byte[] rsaEncryptGess (byte[] src,Key key) throws IOException,GeneralSecurityException{
         Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
         cipher.init(Cipher.ENCRYPT_MODE,key);
@@ -66,6 +67,33 @@ public class Encryption {
         }
         return result;
     }
+
+    //key-24字节的密钥， ivByte-8字节向量，value-需加密的数据   3DES
+    public static byte[] encrypt (byte[] key, byte[] ivByte, byte[] src) throws IOException,GeneralSecurityException{
+
+        SecureRandom sr = new SecureRandom();
+        DESedeKeySpec dks = new DESedeKeySpec(key);
+        SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("DESede");
+        SecretKey securekey = keyFactory.generateSecret(dks);
+        IvParameterSpec iv = new IvParameterSpec(ivByte);
+        Cipher cipher = Cipher.getInstance("DESede/CBC/PKCS5Padding");
+        cipher.init(Cipher.DECRYPT_MODE, securekey, iv, sr);
+        return new String(cipher.doFinal(src)).getBytes();
+    }
+
+    //key-24字节的密钥， ivByte-8字节向量，src-需解密的数据  3DES
+    public static byte[] decrypt (byte[] key, byte[] ivByte, byte[] src) throws IOException,GeneralSecurityException{
+        SecureRandom sr = new SecureRandom();
+        DESedeKeySpec dks = new DESedeKeySpec(key);
+        SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("DESede");
+        SecretKey securekey = keyFactory.generateSecret(dks);
+        IvParameterSpec iv = new IvParameterSpec(ivByte);
+        Cipher cipher = Cipher.getInstance("DESede/CBC/PKCS5Padding");
+        cipher.init(Cipher.ENCRYPT_MODE, securekey, iv, sr);
+        return new String(cipher.doFinal(src)).getBytes();
+    }
+
+
 
 
     public static void main(String[] args) {
