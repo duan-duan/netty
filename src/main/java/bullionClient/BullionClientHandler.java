@@ -11,12 +11,19 @@ import io.netty.channel.ChannelHandlerContext;
  * @description:
  */
 public class BullionClientHandler extends ChannelHandlerAdapter{
+    private ChannelHandlerContext ctx;
 
     private int counter;
     private byte[] req;
 
+
     public BullionClientHandler(String msg){
-        req = (msg+"query time order "+ System.getProperty("line.separator")).getBytes();
+        req = (msg+"    query time order "+ System.getProperty("line.separator")).getBytes();
+    }
+
+    @Override
+    public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
+        this.ctx = ctx;
     }
 
 
@@ -40,4 +47,14 @@ public class BullionClientHandler extends ChannelHandlerAdapter{
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         ctx.close();
     }
+
+    public void send (String msg){
+        ctx.writeAndFlush(msg);
+    }
+
+    public static void main(String[] args) {
+        BullionClientHandler handler = new BullionClientHandler("2222");
+        handler.send("88888");
+    }
+
 }

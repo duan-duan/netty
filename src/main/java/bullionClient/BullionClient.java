@@ -59,5 +59,9 @@ public class BullionClient {
             }
         }
         new BullionClient().connect(port,"localhost","bullion");
+        BullionClientHandler handler = new BullionClientHandler("2222");
+        handler.send("88888");
+
+
     }
 }
